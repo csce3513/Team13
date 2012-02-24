@@ -4,12 +4,10 @@
  */
 package oldmainwars;
 
-/**
- *
- * @author ryan
- */
-public class MyTile {
-    
+import org.newdawn.slick.*;
+
+public class MyTile
+{
     private boolean isOccupied;
     private int xLoc;
     private int yLoc;

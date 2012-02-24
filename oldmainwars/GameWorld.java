@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package oldmainwars;
 
 import it.randomtower.engine.World;
@@ -11,10 +6,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-/**
- *
- * @author mmdougla
- */
 public class GameWorld extends World
 {
     public GameWorld(int id, GameContainer gc)

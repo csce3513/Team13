@@ -4,12 +4,10 @@
  */
 package oldmainwars;
 
-/**
- *
- * @author ryan
- */
-public class MyGrid {
-    
+import org.newdawn.slick.*;
+
+public class MyGrid
+{
     private MyTile[][] grid;
     
     MyGrid()
