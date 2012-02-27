@@ -71,6 +71,7 @@ public class AvatarSelection extends BasicGameState
         characterX[1] = 280;
         characterY[1] = 325;
 
+<<<<<<< HEAD
         characters[2] = new Image("images/model.png");
         characterX[2] = 500;
         characterY[2] = 325;
@@ -78,6 +79,15 @@ public class AvatarSelection extends BasicGameState
         characters[3] = new Image("images/model.png");
         characterX[3] = 50;
         characterY[3] = 325;
+=======
+        characters[2] = new Image("images/Mage.png");
+        characterX[2] = 525;
+        characterY[2] = 285;
+
+        characters[3] = new Image("images/archer.png");
+        characterX[3] = 70;
+        characterY[3] = 310;
+>>>>>>> Dev
     }
 
     public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException
