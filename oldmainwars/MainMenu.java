@@ -18,7 +18,7 @@ public class MainMenu extends BasicGameState
     public Image startGameOption = null;
 
     public static int startX = 300;
-    public static int startY = 590;
+    public static int startY = 595;
 
     float scaleStep = 0.0001f;
     float startGameScale = 1;

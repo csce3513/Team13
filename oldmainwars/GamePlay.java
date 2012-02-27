@@ -28,8 +28,8 @@ public class GamePlay extends BasicGameState
     public Image spritesLeft[] = new Image[3];
     public Animation danteLeft = new Animation();
 
-    public static int danteX = 48;
-    public static int danteY = 68;
+    public static int danteX = 548;
+    public static int danteY = 568;
     //Sound blockFX = null;
 
     private enum STATES
@@ -53,24 +53,24 @@ public class GamePlay extends BasicGameState
     @Override
     public void init(GameContainer gc, StateBasedGame sb) throws SlickException
     {
-        gameHUD = new Image("images/Game Map-v2.jpg");
+        gameHUD = new Image("images/map1.png");
 
-        Image spriteSheet = new Image("images/modelSprite.png");
-        spritesUp[0] = spriteSheet.getSubImage(1, 21, 62, 75);
-        spritesUp[1] = spriteSheet.getSubImage(75, 21, 63, 75);
-        spritesUp[2] = spriteSheet.getSubImage(144, 21, 63, 75);
+        Image spriteSheet = new Image("images/warriorSprite.png");
+        spritesUp[0] = spriteSheet.getSubImage(20, 40, 40, 44);
+        spritesUp[1] = spriteSheet.getSubImage(70, 40, 40, 44);
+        spritesUp[2] = spriteSheet.getSubImage(120, 40, 40, 44);
 
-        spritesRight[0] = spriteSheet.getSubImage(3, 126, 60, 67);
-        spritesRight[1] = spriteSheet.getSubImage(81, 123, 63, 69);
-        spritesRight[2] = spriteSheet.getSubImage(153, 126, 63, 65);
+        spritesRight[0] = spriteSheet.getSubImage(20, 100, 40, 44);
+        spritesRight[1] = spriteSheet.getSubImage(70, 100, 40, 44);
+        spritesRight[2] = spriteSheet.getSubImage(120, 100, 40, 44);
 
-        spritesDown[0] = spriteSheet.getSubImage(6, 212, 63, 76);
-        spritesDown[1] = spriteSheet.getSubImage(81, 212, 63, 76);
-        spritesDown[2] = spriteSheet.getSubImage(153, 212, 62, 72);
+        spritesDown[0] = spriteSheet.getSubImage(4, 138, 44, 48);
+        spritesDown[1] = spriteSheet.getSubImage(48, 138, 44, 48);
+        spritesDown[2] = spriteSheet.getSubImage(98, 138, 44, 48);
 
-        spritesLeft[0] = spriteSheet.getSubImage(0, 312, 63, 72);
-        spritesLeft[1] = spriteSheet.getSubImage(73, 312, 63, 72);
-        spritesLeft[2] = spriteSheet.getSubImage(147, 312, 63, 72);
+        spritesLeft[0] = spriteSheet.getSubImage(20, 230, 40, 44);
+        spritesLeft[1] = spriteSheet.getSubImage(70, 230, 40, 44);
+        spritesLeft[2] = spriteSheet.getSubImage(120, 230, 40, 44);
 
         danteUp = new Animation(spritesUp, 3);
         danteUp.setSpeed(.01f);
@@ -100,7 +100,7 @@ public class GamePlay extends BasicGameState
     public void render(GameContainer gc, StateBasedGame sb, Graphics g) throws SlickException
     {
        //Display Map
-        gameHUD.draw(40,0);
+        gameHUD.draw(0,0);
 
         danteDown.draw(danteX, danteY);
     }

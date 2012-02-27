@@ -14,7 +14,8 @@ public class OldMainWars extends StateBasedGame
     public static final int GamePlay = 2;
 
     public static final int ScreenWidth = 800;
-    public static final int ScreenHeight = 700;
+    public static final int ScreenHeight = 800;
+    
 
     public OldMainWars(String title)
     {
@@ -38,7 +39,7 @@ public class OldMainWars extends StateBasedGame
     public static void main(String[] args) throws SlickException
     {
         AppGameContainer app = new AppGameContainer (new OldMainWars("Old Main Wars"));
-        app.setDisplayMode(ScreenWidth, ScreenHeight, false);
+        app.setDisplayMode(ScreenWidth, ScreenHeight,false);
         app.setTargetFrameRate(60);
         app.start();
     }
