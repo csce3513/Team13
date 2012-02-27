@@ -44,6 +44,7 @@ public class OldMainWars extends StateBasedGame
 =======
         app.setDisplayMode(ScreenWidth, ScreenHeight,false);
 >>>>>>> Dev:oldmainwars/OldMainWars.java
+        app.setDisplayMode(ScreenWidth, ScreenHeight,false);
         app.setTargetFrameRate(60);
         app.start();
     }

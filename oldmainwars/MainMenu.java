@@ -17,6 +17,7 @@ public class MainMenu extends BasicGameState
     public Image title = null;
     public Image startGameOption = null;
 <<<<<<< HEAD:oldmainwars/MainMenu.java
+<<<<<<< HEAD:oldmainwars/MainMenu.java
     public Image options = null;
 
     public static int startX = 100;
@@ -29,6 +30,8 @@ public class MainMenu extends BasicGameState
     float startGameScale = 1;
     float optionsScale = 1;
 =======
+=======
+>>>>>>> Dev:oldmainwars/MainMenu.java
 
     public static int startX = 300;
     public static int startY = 595;
@@ -36,6 +39,9 @@ public class MainMenu extends BasicGameState
     float scaleStep = 0.0001f;
     float startGameScale = 1;
     //float optionsScale = 1;
+<<<<<<< HEAD:oldmainwars/MainMenu.java
+>>>>>>> Dev:oldmainwars/MainMenu.java
+=======
 >>>>>>> Dev:oldmainwars/MainMenu.java
 
     public int stateID = -1;
@@ -61,7 +67,10 @@ public class MainMenu extends BasicGameState
         title = new Image("images/gamename.png");
         startGameOption = new Image("images/Start.png");
 <<<<<<< HEAD:oldmainwars/MainMenu.java
+<<<<<<< HEAD:oldmainwars/MainMenu.java
         options = new Image("images/options.png");
+=======
+>>>>>>> Dev:oldmainwars/MainMenu.java
 =======
 >>>>>>> Dev:oldmainwars/MainMenu.java
 
@@ -80,7 +89,10 @@ public class MainMenu extends BasicGameState
         title.draw(180, 50);
         startGameOption.draw(startX, startY, startGameScale);
 <<<<<<< HEAD:oldmainwars/MainMenu.java
+<<<<<<< HEAD:oldmainwars/MainMenu.java
         options.draw(optionX, optionY, optionsScale);
+=======
+>>>>>>> Dev:oldmainwars/MainMenu.java
 =======
 >>>>>>> Dev:oldmainwars/MainMenu.java
     }
@@ -101,11 +113,14 @@ public class MainMenu extends BasicGameState
             insideStartGame = true;
         }
 <<<<<<< HEAD:oldmainwars/MainMenu.java
+<<<<<<< HEAD:oldmainwars/MainMenu.java
         else if( ( mouseX >= optionX && mouseX <= optionX+ options.getWidth()) &&
             ( mouseY >= optionY && mouseY <= optionY + options.getHeight()) )
         {
             insideOptions = true;
         }
+=======
+>>>>>>> Dev:oldmainwars/MainMenu.java
 =======
 >>>>>>> Dev:oldmainwars/MainMenu.java
 
