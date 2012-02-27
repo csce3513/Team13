@@ -40,11 +40,14 @@ public class OldMainWars extends StateBasedGame
     {
         AppGameContainer app = new AppGameContainer (new OldMainWars("Old Main Wars"));
 <<<<<<< HEAD:oldmainwars/OldMainWars.java
+<<<<<<< HEAD:oldmainwars/OldMainWars.java
         app.setDisplayMode(800, 700, false);
 =======
         app.setDisplayMode(ScreenWidth, ScreenHeight,false);
 >>>>>>> Dev:oldmainwars/OldMainWars.java
+=======
         app.setDisplayMode(ScreenWidth, ScreenHeight,false);
+>>>>>>> Dev:oldmainwars/OldMainWars.java
         app.setTargetFrameRate(60);
         app.start();
     }
