@@ -31,6 +31,7 @@ public class WarriorTest {
 		Warrior War1 = new Warrior();
 		assertEquals(War1.getWarriorHP(), 100);
 		assertEquals(War1.getWarriorPM(), 0.75, 0);
+                assertEquals(War1.getMovement(), 3);
 	}
 
 	@Test

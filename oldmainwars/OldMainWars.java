@@ -11,11 +11,20 @@ public class OldMainWars extends StateBasedGame
 {
     public static final int MainMenu = 0;
     public static final int AvatarSelection = 1;
-    public static final int GamePlay = 2;
+    public static final int MapSelection = 2;
+    public static final int GamePlay = 3;
+    public static final int AvatarSelection2 = 4;
+    public static final int VictoryScreen = 5;
 
     public static final int ScreenWidth = 800;
     public static final int ScreenHeight = 800;
-    
+
+    public static final int Dante = 0;
+    public static final int Warrior = 1;
+    public static final int Morohtar = 2;
+    public static final int Archer = 3;
+    public static final int Mordecai = 4;
+    public static final int Mage = 5;
 
     public OldMainWars(String title)
     {
@@ -23,9 +32,11 @@ public class OldMainWars extends StateBasedGame
 
         this.addState(new MainMenu(MainMenu));
         this.addState(new AvatarSelection(AvatarSelection));
+        this.addState(new AvatarSelection2(AvatarSelection2));
+        this.addState(new MapSelection(MapSelection));
         this.addState(new GamePlay(GamePlay));
+        this.addState(new VictoryScreen(VictoryScreen));
         this.enterState(MainMenu);
-        //this.enterState(GamePlay);
     }
 
     @Override
@@ -33,7 +44,10 @@ public class OldMainWars extends StateBasedGame
     {
         this.getState(MainMenu).init(gc, this);
         this.getState(AvatarSelection).init(gc, this);
+        this.getState(AvatarSelection2).init(gc, this);
+        this.getState(MapSelection).init(gc, this);
         this.getState(GamePlay).init(gc, this);
+        this.getState(VictoryScreen).init(gc, this);
     }
 
     public static void main(String[] args) throws SlickException

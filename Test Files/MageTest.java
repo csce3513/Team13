@@ -35,6 +35,7 @@ public class MageTest {
 		assertEquals(Mage1.getMageMP(),100);
 		assertEquals(Mage1.getMageMM(), 0.85, 0);
 		assertEquals(Mage1.getMagePM(), 0.50, 0);
+                assertEquals(Mage1.getMovement(), 2);
 	}
 
 	@Test
@@ -83,11 +84,26 @@ public class MageTest {
 	public void testMPCost()
 	{
 		Mage Mage6 = new Mage();
-		int damage = 0;
-		
-		damage = Mage6.CastSpell();
-		
+		int damage = Mage6.CastSpell();
+
 		assertEquals(Mage6.getMageMP(), 90);
+
+                damage = Mage6.CastSpell();
+                damage = Mage6.CastSpell();
+                damage = Mage6.CastSpell();
+                damage = Mage6.CastSpell();
+                damage = Mage6.CastSpell();
+                damage = Mage6.CastSpell();
+                damage = Mage6.CastSpell();
+                damage = Mage6.CastSpell();
+                damage = Mage6.CastSpell();
+
+                assertEquals(Mage6.getMageMP(), 0);
+
+                damage = Mage6.CastSpell();
+                assertEquals(Mage6.getMageMP(), 0);
+
+
 	}
 
 	@Test

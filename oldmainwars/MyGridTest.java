@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class MyTileTest {
-
+public class MyGridTest 
+{
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -27,18 +27,17 @@ public class MyTileTest {
 	}
 
 	@Test
-	public void testMyTile() 
+	public void testMyGrid() 
 	{
-		MyTile TilePos = new MyTile();
-		assertEquals(TilePos.GetX(), 0);
-		assertEquals(TilePos.GetY(), 0);
+		MyGrid Grid = new MyGrid();
+		assertNotNull(Grid);
 	}
 
 	@Test
-	public void testMyTileIntInt() 
+	public void testMyGridIntIntIntInt() 
 	{
-		MyTile Pos = new MyTile(5, 10,0,0);
-		assertEquals(Pos.GetX(), 5);
-		assertEquals(Pos.GetY(), 10);
+		MyGrid Grid1 = new MyGrid(5,5, 5, 10);
+		assertEquals(Grid1.GetTile(2, 3).GetX(), 30);
+		assertEquals(Grid1.GetTile(2, 3).GetY(), 10);
 	}
 }

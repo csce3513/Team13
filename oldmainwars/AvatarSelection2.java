@@ -1,7 +1,5 @@
 package oldmainwars;
 
-import java.awt.Font;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -14,9 +12,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tests.xml.Entity;
 import org.newdawn.slick.SpriteSheet;
 import it.randomtower.engine.ResourceManager;
-import org.newdawn.slick.UnicodeFont;
 
-public class AvatarSelection extends BasicGameState
+public class AvatarSelection2 extends BasicGameState
 {
     public static int numAvatars = 3;
     private static int avatarChosen;
@@ -50,7 +47,7 @@ public class AvatarSelection extends BasicGameState
 
     public int stateID = -1;
 
-    public AvatarSelection (int stateID)
+    public AvatarSelection2 (int stateID)
     {
         this.stateID = stateID;
     }
@@ -63,7 +60,7 @@ public class AvatarSelection extends BasicGameState
 
     public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException
     {
-        System.out.println("AvatarSelection init");
+        System.out.println("AvatarSelection2 init");
 
         selected[0] = false; // no avatar initially selected
 
@@ -88,8 +85,8 @@ public class AvatarSelection extends BasicGameState
 
     public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException
     {
-    	//Render String telling player one to choose
-    	arg2.drawString("Player 1 Select Avatar", 280, 130);
+    	//render string telling Player 2 to select avatar
+    	arg2.drawString("Player 2 Select Avatar", 280, 130);
     	
         // render the background
         background.draw(12, 150);
@@ -99,8 +96,7 @@ public class AvatarSelection extends BasicGameState
     	arg2.drawString("Dante", 350, 265);
     	arg2.drawString("Mordecai", 525, 265);
 
-
-        //render back and next buttons
+        //render back/next button
         back.draw(backX, backY, backScale);
         next.draw(nextX, nextY, nextScale);
 
@@ -121,14 +117,14 @@ public class AvatarSelection extends BasicGameState
 
 	public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException
     {
-		//initializing variables
+		//initialize variables
         Input input = gc.getInput();
 
-        //Left/Right mouse clicks
+        //left/right mouse click initialization
         int mouseX = input.getMouseX();
         int mouseY = input.getMouseY();
 
-        //initializing variables
+        //initialize variables
         boolean insideMainMenu = false;
         boolean insideMapSelection = false;
 
@@ -162,55 +158,59 @@ public class AvatarSelection extends BasicGameState
 
         if(insideMainMenu)
         {
-        	//Makes image bigger
+        	//enlarge back button
             if(backScale < 1.05f)
                 backScale += scaleStep * delta;
 
-            //returns to main menu screen
+            //return to previous screen
             if ( input.isMousePressed(Input.MOUSE_LEFT_BUTTON) )
             {
-                sb.enterState(OldMainWars.MainMenu);
+                sb.enterState(OldMainWars.AvatarSelection);
             }
-        }else
+        }
+        
+        else
         {
+        	//back button to normal size
             if(backScale > 1.0f)
                 backScale -= scaleStep * delta;
         }
 
         if((insideMapSelection) && (selected[0] == true)) //if next is clicked on and an avatar is selected
         {
+        	//enlarge next button
             if(nextScale < 1.05f)
                 nextScale += scaleStep * delta;
 
-            //Avatar Selection
             if ( input.isMousePressed(Input.MOUSE_LEFT_BUTTON) )
             {
                 for(int i = 1; i <= numAvatars; i++) //go through each avatar
                 {
                     if (selected[i] == true)
                     {
-                        AvatarSelection.setAvatar(i);
+                        AvatarSelection2.setAvatar(i);
                     }
                 }
 
                 //Advance to the next screen
-                sb.enterState(OldMainWars.AvatarSelection2);
+                sb.enterState(OldMainWars.MapSelection);
             }
         }
         else
         {
+        	//next button to normal size
             if(nextScale > 1.0f)
                 nextScale -= scaleStep * delta;
         }
     }
 
-	//stores number of the avatar chosen
+	//Store the number of the avatar chosen
     public static void setAvatar(int n) throws SlickException
     {
         avatarChosen = n;
     }
     
-    //returns number of avatar that was chosen
+    //return the number of the avatar that was chosen
     public static int getAvatar() throws SlickException
     {
         return avatarChosen;

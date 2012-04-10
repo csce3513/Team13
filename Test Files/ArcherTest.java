@@ -35,6 +35,7 @@ public class ArcherTest {
 		assertEquals(Arch.getArcherMP(),60);
 		assertEquals(Arch.getArcherMM(), 0.50, 0);
 		assertEquals(Arch.getArcherPM(), 0.60, 0);
+                assertEquals(Arch.getMovement(), 2);
 	}
 
 	@Test
@@ -81,6 +82,14 @@ public class ArcherTest {
 		
 		assertEquals(numTrue, 101);
 	}
+
+        @Test
+        public void testEnoughMP()
+        {
+            Archer a = new Archer();
+            assertEquals(a.EnoughMP(60), true);
+            assertEquals(a.EnoughMP(61), false);
+        }
 
 	@Test
 	public void testAttackDamage() 

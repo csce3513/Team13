@@ -41,6 +41,8 @@ public class MainMenu extends BasicGameState
 
     public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException
     {
+        System.out.println("MainMenu init");
+
         //Load background
         background = new Image("images/old_main.jpg");
 
@@ -57,21 +59,21 @@ public class MainMenu extends BasicGameState
     public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException
     {
         // render the background
-        background.draw(100, 150);
+        background.draw((OldMainWars.ScreenWidth - background.getWidth()) / 2, 150);
 
-        title.draw(180, 50);
+        title.draw((OldMainWars.ScreenWidth - title.getWidth()) / 2, 50);
         startGameOption.draw(startX, startY, startGameScale);
     }
 
     public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException
     {
+
         Input input = gc.getInput();
 
         int mouseX = input.getMouseX();
         int mouseY = input.getMouseY();
 
         boolean insideStartGame = false;
-        boolean insideOptions = false;
 
         if( ( mouseX >= startX && mouseX <= startX + startGameOption.getWidth()) &&
             ( mouseY >= startY && mouseY <= startY + startGameOption.getHeight()) )
