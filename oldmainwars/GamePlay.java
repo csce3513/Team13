@@ -1,5 +1,7 @@
 package oldmainwars;
 
+import java.awt.Font;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.*;
@@ -8,9 +10,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class GamePlay extends BasicGameState
 {
-	//initializing variable
+    //initializing variable
     public int stateId = 0;
 
+    //number of units on each team
     public static int numUnits = 3;
 
     public static final int X_OFFSET = 20;
@@ -20,11 +23,6 @@ public class GamePlay extends BasicGameState
     public static final int ATTACK = 1;
     public static final int MAGIC = 2;
     public static final int HEAL = 3;
-
-    public static final int UP = 0;
-    public static final int RIGHT = 1;
-    public static final int DOWN = 2;
-    public static final int LEFT = 3;
     
     //initialize tile width and height
     public static final int TILE_WIDTH = 80;
@@ -37,14 +35,20 @@ public class GamePlay extends BasicGameState
     public Image attackButton = null;
     public Image magicButton = null;
     public Image healButton = null;
+    public Image passButton = null;
     public Image moveTile = null;
     public Image attackTile = null;
     public Image magicTile = null;
     public Image healTile = null;
+    public Image blueDot = null;
+    public Image redDot = null;
+    public Image Tombstone = null;
 
-    //initializing grid and sound to null
+    //initializing grid and sound effects to null
     public MyGrid grid = null;
-    public Sound blockFX = null;
+    public Sound attackFX[] = new Sound[3];
+    public Sound magicFX[] = new Sound[3];
+    public Sound healFX[] = new Sound[3];
     
     //initializing button clicks to null 
     public boolean movePressed = false;
@@ -61,26 +65,45 @@ public class GamePlay extends BasicGameState
     public static int magicY = 687;
     public static int healX = 575;
     public static int healY = 728;
+    public static int passX = 730;
+    public static int passY = 707;
 
     //initializing avatar images to null
-    public static Image danteSheet = null;
-    public static Image warriorSheet = null;
-    public static Image morohtarSheet = null;
-    public static Image archerSheet = null;
-    public static Image mordecaiSheet = null;
-    public static Image mageSheet = null;
+    public static Image danteSheet1 = null;
+    public static Image warriorSheet1 = null;
+    public static Image morohtarSheet1 = null;
+    public static Image archerSheet1 = null;
+    public static Image mordecaiSheet1 = null;
+    public static Image mageSheet1 = null;
+    public static Image danteSheet2 = null;
+    public static Image warriorSheet2 = null;
+    public static Image morohtarSheet2 = null;
+    public static Image archerSheet2 = null;
+    public static Image mordecaiSheet2 = null;
+    public static Image mageSheet2 = null;
 
-    //initializing variable to keep track who's turn
+    //initializing different animations to null;
+    public Animation healAnimation = null;
+    public Animation magicAnimation = null;
+    public Animation attackAnimation = null;
+
+    //initializing variable to keep track who's turn it is and whether they've moved/attacked yet
     public int turn;
     public boolean rightTeamSelected;
+    public boolean movedYet;
+    public boolean attackedYet;
 
     //initializing position tile variable
     public MyTile selectedTile = new MyTile();
     public MyTile pos1 = new MyTile();
     public MyTile pos2 = new MyTile();
+    public MyTile damagedTile = new MyTile(); //last tile that was attacked/magiced/healed
 
     //initializing string to display tile location of avatar
     public String tileLoc = null;
+
+    //initializing string to display damage done
+    public String numbers = null;
 
     //initializing x,y location
     public int xLoc = 0;
@@ -88,7 +111,14 @@ public class GamePlay extends BasicGameState
 
     //initializing character array for troops
     Character unit[] = new Character[numUnits * 2];
-    
+
+    //variable to keep track of how much time has passed
+    public int timer = 0;
+    public int turnTimer = 0;
+
+    //the last action taken, so we know which animation to show
+    public int lastAction = 0;
+
     //initializing variable to keep track of victor
     public static int victor = 0;
 
@@ -99,39 +129,44 @@ public class GamePlay extends BasicGameState
 
     private STATES currentState = null;
 
+    //initialize font variables
+    Font font = null;
+    TrueTypeFont trueTypeFont = null;
+
+
+    //constructor
     public GamePlay(int stateId)
     {
         this.stateId = stateId;
     }
 
+    //get state id
     @Override
     public int getID()
     {
         return stateId;
     }
 
+    //function to initialize images
     @Override
     public void init(GameContainer gc, StateBasedGame sb) throws SlickException
     {
-        System.out.println("GamePlay init");
-
-        System.out.println("************************************************");
-        System.out.println("-1:" + (int)-1/numUnits);
-        System.out.println("0:" + (int)0/numUnits);
-        System.out.println("1:" + (int)1/numUnits);
-        System.out.println("2:" + (int)2/numUnits);
-        System.out.println("3:" + (int)3/numUnits);
-        System.out.println("4:" + (int)4/numUnits);
-        System.out.println("5:" + (int)5/numUnits);
-        System.out.println("************************************************");
+        //initializing game interface
+        gameInterface = new Image("images/interface.png");
 
         //making avatar image variables equal to their avatar sprite image file
-        danteSheet = new Image("images/warriorSprite.png");
-        warriorSheet = new Image("images/regular_warrior.png");
-        morohtarSheet = new Image("images/archerSprite.png");
-        archerSheet = new Image("images/regular_archer.png");
-        mordecaiSheet = new Image("images/mageSprite.png");
-        mageSheet = new Image("images/regular_mage.png");
+        danteSheet1 = new Image("images/warriorSprite.png");
+        warriorSheet1 = new Image("images/regular_warrior.png");
+        morohtarSheet1 = new Image("images/archerSprite.png");
+        archerSheet1 = new Image("images/regular_archer.png");
+        mordecaiSheet1 = new Image("images/mageSprite.png");
+        mageSheet1 = new Image("images/regular_mage.png");
+        danteSheet2 = new Image("images/Copy of warriorSprite.png");
+        warriorSheet2 = new Image("images/Copy of regular_warrior.png");
+        morohtarSheet2 = new Image("images/Copy of archerSprite.png");
+        archerSheet2 = new Image("images/Copy of regular_archer.png");
+        mordecaiSheet2 = new Image("images/Copy of mageSprite.png");
+        mageSheet2 = new Image("images/Copy of regular_mage.png");
 
         //initializing move,attack,magic, and heal tile images
         moveTile = new Image("images/move_tile.png");
@@ -144,63 +179,105 @@ public class GamePlay extends BasicGameState
         attackButton = new Image("images/attackButton.png");
         magicButton = new Image("images/magicButton.png");
         healButton = new Image("images/healButton.png");
-
-
+        passButton = new Image("images/passButton.png");
         
+        Tombstone = new Image("images/Tombstone.png");
+
+        //getting images for blue and red dot to allow player to see if they can move and/or attack
+        Image dots = new Image("images/dots.png");
+        blueDot = dots.getSubImage(60, 0, 58, 58);
+        redDot = dots.getSubImage(0, 0, 58, 58);
+        blueDot = blueDot.getScaledCopy(.3f);
+        redDot = redDot.getScaledCopy(.3f);
+
+        //set up animations
+        setAnimations();
+  
         //initializing game grid
         grid = new MyGrid(10,10, TILE_HEIGHT, TILE_WIDTH);
         
         //setting string location variable to empty
         tileLoc = "";
+        numbers = "";
         
-        //initializing sound to play
-        //blockFX  = new Sound("data/pulse.wav");
+        //initializing sound effects to play
+        attackFX[0] = new Sound("sounds/attack1.wav");
+        attackFX[1] = new Sound("sounds/attack2.wav");
+        attackFX[2] = new Sound("sounds/attack3.wav");
+        magicFX[0] = new Sound("sounds/magic1.wav");
+        magicFX[1] = new Sound("sounds/magic2.wav");
+        magicFX[2] = new Sound("sounds/magic3.wav");
+        healFX[0] = new Sound("sounds/heal1.wav");
+        healFX[1] = new Sound("sounds/heal2.wav");
+        healFX[2] = new Sound("sounds/heal3.wav");
+        
+        //initialization of font
+        font = new Font("images/abaddon.TTF", Font.BOLD, 30);
+    	trueTypeFont = new TrueTypeFont(font, true);
     }
 
+    //function to enter state
     @Override
     public void enter(GameContainer gc, StateBasedGame sb) throws SlickException
     {
         super.enter(gc, sb);
-
+        
+        //delay
+        timer = 200;
+        
+        //Clears game grid and resets occupied positions
+        for(int y = 0; y < 10; y++)
+        {
+            for(int x = 0; x < 10; x++)
+            {
+            	pos2 = grid.GetTile(x, y);
+            	pos2.SetOccupiedFalse();
+            	pos2.SetOccupiedBy(-1);
+            }
+        }
 
         // Player 1 Character Selection
         if (AvatarSelection.getAvatar() == 1) //dante selected
         {
-            unit[0] = new Character(OldMainWars.Dante);
-            unit[1] = new Character(OldMainWars.Mage);
-            unit[2] = new Character(OldMainWars.Archer);
+            unit[0] = new Character(OldMainWars.Dante, 1);
+            unit[1] = new Character(OldMainWars.Mage, 1);
+            unit[2] = new Character(OldMainWars.Archer, 1);
         }
+        
         else if (AvatarSelection.getAvatar() == 2) //mordecai selected
         {
-            unit[0] = new Character(OldMainWars.Mordecai);
-            unit[1] = new Character(OldMainWars.Archer);
-            unit[2] = new Character(OldMainWars.Warrior);
+            unit[0] = new Character(OldMainWars.Mordecai, 1);
+            unit[1] = new Character(OldMainWars.Archer, 1);
+            unit[2] = new Character(OldMainWars.Warrior, 1);
         }
+        
         else //if (AvatarSelection.getAvatar() == 3) //morohtar selected
         {
-            unit[0] = new Character(OldMainWars.Morohtar);
-            unit[1] = new Character(OldMainWars.Warrior);
-            unit[2] = new Character(OldMainWars.Mage);
+            unit[0] = new Character(OldMainWars.Morohtar, 1);
+            unit[1] = new Character(OldMainWars.Warrior, 1);
+            unit[2] = new Character(OldMainWars.Mage, 1);
         }
 
         // Player 2 Character Selection
         if (AvatarSelection2.getAvatar() == 1) //dante selected
         {
-            unit[3] = new Character(OldMainWars.Dante);
-            unit[4] = new Character(OldMainWars.Mage);
-            unit[5] = new Character(OldMainWars.Archer);
+            unit[3] = new Character(OldMainWars.Dante, 2);
+            unit[4] = new Character(OldMainWars.Mage, 2);
+            unit[5] = new Character(OldMainWars.Archer, 2);
         }
+        
         else if (AvatarSelection2.getAvatar() == 2) //mordecai selected
         {
-            unit[3] = new Character(OldMainWars.Mordecai);
-            unit[4] = new Character(OldMainWars.Archer);
-            unit[5] = new Character(OldMainWars.Warrior);
+            unit[3] = new Character(OldMainWars.Mordecai, 2);
+            unit[4] = new Character(OldMainWars.Archer, 2);
+            unit[5] = new Character(OldMainWars.Warrior, 2);
         }
+        
         else //if (AvatarSelection2.getAvatar() == 3) //morohtar selected
         {
-            unit[3] = new Character(OldMainWars.Morohtar);
-            unit[4] = new Character(OldMainWars.Warrior);
-            unit[5] = new Character(OldMainWars.Mage);
+            unit[3] = new Character(OldMainWars.Morohtar, 2);
+            unit[4] = new Character(OldMainWars.Warrior, 2);
+            unit[5] = new Character(OldMainWars.Mage, 2);
         }
         
         // get map selected in map selection and loads it
@@ -208,23 +285,33 @@ public class GamePlay extends BasicGameState
         {
             map1Setup();
         }
+        
         else if (MapSelection.getMap() == 2)
         {
             map2Setup();
         }
+        
         else //if (MapSelection.getMap() == 3)
         {
             map3Setup();
         }
 
-        //sets turn equal to player 1
-        turn = 0;
+        //sets turn equal to the loser of the previous game (player 1 by default)
+        if (GamePlay.getVictor() == 1)
+            turn = 2;
+        else //if (GamePlay.getVictor() == 2)
+            turn = 1;
+        
+        //initialize variables to false
         rightTeamSelected = false;
+        movedYet = false;
+        attackedYet = false;
 
         //Start game
         currentState = STATES.START_GAME_STATE;
     }
 
+    //function to draw images on screen
     @Override
     public void render(GameContainer gc, StateBasedGame sb, Graphics g) throws SlickException
     {
@@ -232,7 +319,6 @@ public class GamePlay extends BasicGameState
         gameMap.draw(0,0);
 
         //Display Interface
-        gameInterface = new Image("images/interface.png");
         gameInterface.draw(80, 666);
 
         //Display Buttons
@@ -240,13 +326,23 @@ public class GamePlay extends BasicGameState
         attackButton.draw(attackX, attackY);
         magicButton.draw(magicX, magicY);
         healButton.draw(healX, healY);
+        passButton.draw(passX, passY);
 
         //draw each unit and draw it's  HUD in the interface if it's selected
         for (int i = 0; i < (numUnits * 2); i++)
         {
             if (unit[i].isAlive())
                 unit[i].draw();
-
+            
+            //Unit died and put a tombstone and occupy space
+            else
+            {
+            	Tombstone.draw(unit[i].getXCoordinate(), unit[i].getYCoordinate());
+            	pos1 = grid.FindTile(unit[i].getXCoordinate(), unit[i].getYCoordinate());
+                pos1.SetOccupiedTrue();
+                pos1.SetOccupiedBy(-1);
+            }
+            
             if ((unit[i].isSelected()) && unit[i].isAlive())
                 unit[i].drawHUD(g);
         }
@@ -315,10 +411,49 @@ public class GamePlay extends BasicGameState
             }
         }
 
+        // display blue dot if player hasn't moved yet this turn
+        if (!movedYet)
+            blueDot.draw(760, 645);
+
+        // display red dot if player hasn't attacked/healed yet this turn
+        if (!attackedYet)
+            redDot.draw(780, 645);
+
         //render string for tile location
         g.drawString(tileLoc, 360, 645);
+
+        //display appropriate damage/animation for a short period of time
+        if (timer < 200)
+        {
+           	if (lastAction == ATTACK)
+           	{
+           		attackAnimation.draw(damagedTile.GetX(), damagedTile.GetY());
+           	}
+           	else if (lastAction == MAGIC)
+           	{
+               	magicAnimation.draw(damagedTile.GetX(), damagedTile.GetY());
+           	}
+           	else if (lastAction == HEAL)
+           	{
+               	healAnimation.draw(damagedTile.GetX(), damagedTile.GetY());
+           	}
+           		
+           	g.drawString(numbers, damagedTile.GetX(), damagedTile.GetY());
+        }
+        
+        //displays who turn it is at the start of the turn
+        if(turn == 1 && turnTimer < 100)
+        	trueTypeFont.drawString(275, 300, "Player One Turn");
+        
+        if(turn == 2 && turnTimer < 100)
+        	trueTypeFont.drawString(275, 300, "Player Two Turn");
+
+        //increment timer variables
+        timer++;
+        turnTimer++;
     }
 
+    //function to update screen
     @Override
     public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException
     {
@@ -327,26 +462,58 @@ public class GamePlay extends BasicGameState
 
         int mouseX = 0;
         int mouseY = 0;
+        
+        //sound
+        OldMainWars.handleMusic(gc);
+        
+
+        //'M' key pressed while right team is selected
+        if ((input.isKeyPressed(Input.KEY_M)) && (selectedTile.GetOccupied()) && (rightTeamSelected) && (!movedYet))
+        {
+            movePressed();
+        }
+
+        //'A' key pressed while right team is selected
+        if ((input.isKeyPressed(Input.KEY_A)) && (selectedTile.GetOccupied()) && (rightTeamSelected) && (!attackedYet))
+        {
+            attackPressed();
+        }
+
+        //'G' key pressed while right team is selected
+        if ((input.isKeyPressed(Input.KEY_G)) && (selectedTile.GetOccupied()) && (rightTeamSelected) && (!attackedYet))
+        {
+            magicPressed();
+        }
+
+        //'H' key pressed while right team is selected
+        if ((input.isKeyPressed(Input.KEY_H)) && (selectedTile.GetOccupied()) && (rightTeamSelected) && (!attackedYet))
+        {
+            healPressed();
+        }
+
+        //'P' key pressed 
+        if (input.isKeyPressed(Input.KEY_P))
+        {
+            passPressed();
+        }
 
         //function for when mouse is pressed
-        if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
+        if((input.isMousePressed(Input.MOUSE_LEFT_BUTTON)))
         {
-        	//gets mouse location on screen
+            //gets mouse location on screen
             mouseX = input.getMouseX();
             mouseY = input.getMouseY();
 
             // tile selected and no button pressed
             if(mouseX <= 800 && mouseY <= 640 && !movePressed && !attackPressed && !magicPressed && !healPressed)
             {
-                selectedTile = grid.FindTile(mouseX,mouseY);
+                selectedTile = grid.FindTile(mouseX, mouseY);
                 xLoc = grid.GetXLoc(mouseX);
                 yLoc = grid.GetYLoc(mouseY);
 
                 // if selected tile is occupied
                 if (selectedTile.GetOccupied())
                 {
-                    System.out.println("occupyBy: " + selectedTile.GetOccupiedBy());
-
                     // select that unit, unselect all other units
                     for (int i = 0; i < (numUnits * 2); i++)
                     {
@@ -357,14 +524,12 @@ public class GamePlay extends BasicGameState
                     }
 
                     //checks to see if the selected unit is on the player's team whose turn it is
-                    if (((int)selectedTile.GetOccupiedBy()/numUnits) == turn)
+                    if (((int)selectedTile.GetOccupiedBy()/numUnits) == (turn - 1))
                     {
                         rightTeamSelected = true;
-                        System.out.println("Right team selected");
                     }
                     else
                     {
-                        System.out.println("Wrong team selected");
                         rightTeamSelected = false;
                     }
                 }
@@ -379,46 +544,32 @@ public class GamePlay extends BasicGameState
                 }
 
                 //Display tile location and who's turn it is
-                tileLoc = "Tile: (" + yLoc + "," + xLoc + ") Player " + (turn + 1) + " turn.";
+                tileLoc = "Tile: (" + yLoc + "," + xLoc + ") Player " + turn + " turn.";
             }
             // move button pressed
-            else if((moveX < mouseX && mouseX < moveX + moveButton.getWidth()) && (moveY < mouseY && mouseY < moveY + moveButton.getHeight()) && (selectedTile.GetOccupied()) && (rightTeamSelected))
+            else if((moveX < mouseX && mouseX < moveX + moveButton.getWidth()) && (moveY < mouseY && mouseY < moveY + moveButton.getHeight()) && (selectedTile.GetOccupied()) && (rightTeamSelected) && (!movedYet))
             {
-                movePressed = true;
-                attackPressed = false;
-                magicPressed = false;
-                healPressed = false;
-                tileLoc = "Choose a tile to move to.";
-
+                movePressed();
             }
             // attack button pressed
-            else if((attackX < mouseX && mouseX < attackX + attackButton.getWidth()) && (attackY < mouseY && mouseY < attackY + attackButton.getHeight()) && (selectedTile.GetOccupied()) && (rightTeamSelected))
+            else if((attackX < mouseX && mouseX < attackX + attackButton.getWidth()) && (attackY < mouseY && mouseY < attackY + attackButton.getHeight()) && (selectedTile.GetOccupied()) && (rightTeamSelected) && (!attackedYet))
             {
-                attackPressed = true;
-                movePressed = false;
-                magicPressed = false;
-                healPressed = false;
-                tileLoc = "Choose a tile to physical attack.";
+                attackPressed();
             }
             // magic button pressed
-            else if((magicX < mouseX && mouseX < magicX + magicButton.getWidth()) && (magicY < mouseY && mouseY < magicY + magicButton.getHeight()) && (selectedTile.GetOccupied()) && (rightTeamSelected))
+            else if((magicX < mouseX && mouseX < magicX + magicButton.getWidth()) && (magicY < mouseY && mouseY < magicY + magicButton.getHeight()) && (selectedTile.GetOccupied()) && (rightTeamSelected) && (!attackedYet))
             {
-                magicPressed = true;
-                movePressed = false;
-                attackPressed = false;
-                healPressed = false;
-                tileLoc = "Choose a tile to magic attack.";
-
+                magicPressed();
             }
             // heal button pressed
-            else if((healX < mouseX && mouseX < healX + healButton.getWidth()) && (healY < mouseY && mouseY < healY + healButton.getHeight()) && (selectedTile.GetOccupied()) && (rightTeamSelected))
+            else if((healX < mouseX && mouseX < healX + healButton.getWidth()) && (healY < mouseY && mouseY < healY + healButton.getHeight()) && (selectedTile.GetOccupied()) && (rightTeamSelected) && (!attackedYet))
             {
-                healPressed = true;
-                movePressed = false;
-                attackPressed = false;
-                magicPressed = false;
-                tileLoc = "Choose a tile to heal.";
-
+                healPressed();
+            }
+            // pass button pressed
+            else if((passX < mouseX && mouseX < passX + passButton.getWidth()) && (passY < mouseY && mouseY < passY + passButton.getHeight()))
+            {
+                passPressed();
             }
             else if(mouseX <= 800 && mouseY <= 640 && movePressed) // move the selected unit
             {
@@ -438,23 +589,37 @@ public class GamePlay extends BasicGameState
             }
             else if(!movePressed && !attackPressed && !magicPressed && !healPressed && (mouseY >= 600)) //nothing selected
             {
-                tileLoc = "";
+                tileLoc = "Player " + turn + " turn.";
             }
         }
         
         //If all Player 1 units are killed declares Player 2 the victor and vice versa
         if(!unit[0].isAlive() && !unit[1].isAlive() && !unit[2].isAlive())
         {
-            victor = 2;
+            
+        	victor = 2;
+            delay(25000);
             sb.enterState(OldMainWars.VictoryScreen);
+            
         }        
         else if(!unit[3].isAlive() && !unit[4].isAlive() && !unit[5].isAlive())
-        {
-            victor = 1;
-            sb.enterState(OldMainWars.VictoryScreen);
+        {     	
+        	victor = 1;
+        	delay(25000);
+        	sb.enterState(OldMainWars.VictoryScreen);
         }
         
+
     }
+  //****************************************************************  
+    public void delay (int howLong) // delay function to waste time
+    {
+    	for (int i = 1 ; i <= howLong ; i++)
+    	{
+    		double garbage = Math.PI * Math.PI;
+    	}
+    }
+    //**************************************************************** 
 
     //function to execute correct action chosen by player
     public void Action(MyTile pos1, Input input, int action)
@@ -469,22 +634,24 @@ public class GamePlay extends BasicGameState
         //checks to see if left mouse button has been pressed
         if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
         {
-        	//gets mouse coordinates
+            //gets mouse coordinates
             mouseX = input.getMouseX();
             mouseY = input.getMouseY();
 
             // mouse is in the grid area
             if(mouseX <= 800 && mouseY <= 640)
             {
-                pos2 = grid.FindTile(mouseX,mouseY);
+                pos2 = grid.FindTile(mouseX, mouseY);
                 xLoc = grid.GetXLoc(mouseX);
                 yLoc = grid.GetYLoc(mouseY);
 
-                if (inRange(pos1, pos2, action)) //pos2 is in range of pos1
+                //pos2 is in range of pos1
+                if (inRange(pos1, pos2, action))
                 {
-                	//checks to see if move has been selected
+                    //checks to see if move has been selected
                     if (action == MOVE)
                     {
+                        //tile unit wants to move to is empty
                         if(!pos2.GetOccupied())
                         {
                             occupiedBy = pos1.GetOccupiedBy();
@@ -494,24 +661,29 @@ public class GamePlay extends BasicGameState
                             pos2.SetOccupiedTrue();
                             pos2.SetOccupiedBy(occupiedBy);
 
-                            //System.out.println("Occupied By " + occupiedBy);
-
                             unit[occupiedBy].setCoordinates(pos2.GetX() + X_OFFSET, pos2.GetY() + Y_OFFSET);
-                            turn = handleTurn();
-                            rightTeamSelected = false;
+
+                            numbers = "";
+
+                            lastAction = MOVE;
+                            movedYet = true;
                         }
-                        //turn = handleTurn();
-                        //rightTeamSelected = false;
                     }
                     
-                  //checks to see if attack has been selected
+                    //checks to see if attack has been selected
                     else if (action == ATTACK) // physical attack
                     {
+                        // attacked tile is occupied by another unit
                         if(pos2.GetOccupied() && (pos2.GetOccupiedBy() >= 0))
                         {
                             int damage = unit[pos1.GetOccupiedBy()].AttackDamage();
-                            System.out.println(damage + " damage dealt");
                             unit[pos2.GetOccupiedBy()].Damage(damage);
+
+                            //total attack damage dealt
+                            numbers = "-" + damage;
+
+                            damagedTile = pos2;
+                            resetTimer();
 
                             // if attacked unit died, make that tile unoccupied
                             if (unit[pos2.GetOccupiedBy()].isAlive() == false)
@@ -519,19 +691,30 @@ public class GamePlay extends BasicGameState
                                 pos2.SetOccupiedFalse();
                                 pos2.SetOccupiedBy(-1);
                             }
-                            turn = handleTurn();
-                            rightTeamSelected = false;
+
+                            // play random attack sound effect
+                            int rand = randomNumber();
+                            attackFX[rand].play();
+                            
+                            lastAction = ATTACK;
+                            attackedYet = true;
                         }
                     }
                     
                   //checks to see if magic has been selected
                     else if (action == MAGIC) // magic attack
                     {
-                        if(pos2.GetOccupied() && (pos2.GetOccupiedBy() >= 0))
+                        // attacked tile is occupied by another unit
+                        if(pos2.GetOccupied() && (pos2.GetOccupiedBy() >= 0) && (unit[pos1.GetOccupiedBy()].EnoughMP(10)))
                         {
                             int damage = unit[pos1.GetOccupiedBy()].CastSpell();
-                            System.out.println(damage + " magic damage dealt");
                             unit[pos2.GetOccupiedBy()].Damage(damage);
+
+                            //Total magic damage dealt
+                            numbers = "-" + damage;
+
+                            damagedTile = pos2;
+                            resetTimer();
 
                             // if attacked unit died, make that tile unoccupied
                             if (unit[pos2.GetOccupiedBy()].isAlive() == false)
@@ -539,23 +722,46 @@ public class GamePlay extends BasicGameState
                                 pos2.SetOccupiedFalse();
                                 pos2.SetOccupiedBy(-1);
                             }
-                            turn = handleTurn();
-                            rightTeamSelected = false;
+
+                            // play random magic sound effect
+                            int rand = randomNumber();
+                            magicFX[rand].play();
+
+                            lastAction = MAGIC;
+                            attackedYet = true;
                         }
                     }
                     
                   //checks to see if heal has been selected
                     else if (action == HEAL && (pos2.GetOccupiedBy() >= 0))
                     {
-                        if(pos2.GetOccupied())
+                        // attacked tile is occupied
+                        if(pos2.GetOccupied() && (pos2.GetOccupiedBy() >= 0) && (unit[pos1.GetOccupiedBy()].EnoughMP(10)))
                         {
                             int heal = unit[pos1.GetOccupiedBy()].CastSpell();
-                            System.out.println(heal + " damage healed");
                             unit[pos2.GetOccupiedBy()].Healed(heal);
-                            turn = handleTurn();
-                            rightTeamSelected = false;
+
+                            //total amount healed
+                            numbers = "+" + heal;
+
+                            damagedTile = pos2;
+                            
+                            resetTimer();
+
+                            // play random heal sound effect
+                            int rand = randomNumber();
+                            healFX[rand].play();
+                            
+                            lastAction = HEAL;
+                            attackedYet = true;
                         }
                     }
+                }
+
+                // switch to other players turn after a move and an attack/magic/heal
+                if ((movedYet) && (attackedYet))
+                {
+                    handleTurn();
                 }
             }
         }
@@ -566,8 +772,8 @@ public class GamePlay extends BasicGameState
         magicPressed = false;
         healPressed = false;
 
-        //displays who turn it is
-        tileLoc = "Player " + (turn + 1) + " turn.";
+        //displays whose turn it is
+        tileLoc = "Player " + turn + " turn.";
      }
 
     //function to verify valid range for move, attack, magic, and heal
@@ -618,7 +824,6 @@ public class GamePlay extends BasicGameState
             else
                 inRange = false;
         }
-    
         else if (action == ATTACK) // physical attack has been selected
         {
             if (distance <= unit[pos1.GetOccupiedBy()].getAttackRange())
@@ -644,12 +849,21 @@ public class GamePlay extends BasicGameState
     }
 
     //function to handle player turns
-    public int handleTurn()
+    public void handleTurn()
     {
-        if (turn == 0)
-            return 1;
+    	//initialize variables to false
+        rightTeamSelected = false;
+        movedYet = false;
+        attackedYet = false;
+
+        //determine who's turn it is
+        if (turn == 1)
+            turn = 2;
         else
-            return 0;
+            turn = 1;
+        
+        //reset timer
+        turnTimer = 0;
     }
     
     //function to get the victor
@@ -717,6 +931,7 @@ public class GamePlay extends BasicGameState
             pos1.SetOccupiedBy(5);
     }
     
+  //Function to set up the grid to be used with each map
     public void map2Setup() throws SlickException
     {
             gameMap = new Image("images/map2_2.png");
@@ -790,6 +1005,7 @@ public class GamePlay extends BasicGameState
             pos1.SetOccupiedBy(5);
     }
     
+  //Function to set up the grid to be used with each map
     public void map3Setup() throws SlickException
     {
             gameMap = new Image("images/map3.png");
@@ -840,5 +1056,101 @@ public class GamePlay extends BasicGameState
             pos1 = grid.FindTile(unit[5].getXCoordinate(), unit[5].getYCoordinate());
             pos1.SetOccupiedTrue();
             pos1.SetOccupiedBy(5);
+    }
+
+    //function for animations
+    public void setAnimations() throws SlickException
+    {
+        Image sheet;
+        Image image[] = new Image[3];
+
+        //load heal animation
+        sheet = new Image("images/healAnimation.png");
+        image[0] = sheet.getSubImage(0, 0, 80, 64);
+        image[1] = sheet.getSubImage(80, 0, 80, 64);
+        image[2] = sheet.getSubImage(160, 0, 80, 64);
+        healAnimation = new Animation(image, 555);
+
+        //load magic animation
+        sheet = new Image("images/magicAnimation.png");
+        image[0] = sheet.getSubImage(0, 0, 80, 64);
+        image[1] = sheet.getSubImage(80, 0, 80, 64);
+        image[2] = sheet.getSubImage(160, 0, 80, 64);
+        magicAnimation = new Animation(image, 200);
+
+        //load attack animation
+        sheet = new Image("images/attackAnimation.png");
+        image[0] = sheet.getSubImage(0, 0, 80, 64);
+        image[1] = sheet.getSubImage(80, 0, 80, 64);
+        image[2] = sheet.getSubImage(160, 0, 80, 64);
+        attackAnimation = new Animation(image, 444);
+    }
+
+    //move button pressed
+    public void movePressed()
+    {
+        movePressed = true;
+        attackPressed = false;
+        magicPressed = false;
+        healPressed = false;
+        tileLoc = "Player " + turn + " Choose a tile to move to.";
+    }
+
+    //attack button pressed
+    public void attackPressed()
+    {
+        attackPressed = true;
+        movePressed = false;
+        magicPressed = false;
+        healPressed = false;
+        tileLoc = "Player " + turn + " Choose a tile to physical attack.";
+    }
+
+    //magic button pressed
+    public void magicPressed()
+    {
+        magicPressed = true;
+        movePressed = false;
+        attackPressed = false;
+        healPressed = false;
+        tileLoc = "Player " + turn + " Choose a tile to magic attack.";
+    }
+
+    //heal button pressed
+    public void healPressed()
+    {
+        healPressed = true;
+        movePressed = false;
+        attackPressed = false;
+        magicPressed = false;
+        tileLoc = "Player " + turn + " Choose a tile to heal.";
+    }
+
+    //pass button pressed
+    public void passPressed()
+    {
+        movePressed = false;
+        attackPressed = false;
+        magicPressed = false;
+        healPressed = false;
+        tileLoc = "Player " + turn + " passed.";
+
+        handleTurn();
+
+        tileLoc += "  Player " + turn + " turn.";
+    }
+
+    //reset timer to zero
+    public void resetTimer()
+    {
+        timer = 0;
+    }
+
+    //create random number between 0 and 2
+    public int randomNumber()
+    {
+        Random rand = new Random();
+
+        return (rand.nextInt(3));
     }
 }

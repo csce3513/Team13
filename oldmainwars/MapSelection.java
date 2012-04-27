@@ -47,21 +47,22 @@ public class MapSelection extends BasicGameState
     public int stateID = -1;
     private java.awt.Font robotypeRegular;
 
+    //constructor
     public MapSelection (int stateID)
     {
         this.stateID = stateID;
     }
 
+    //get state id
     @Override
     public int getID()
     {
         return stateID;
     }
 
+    //initialize map images
     public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException
     {
-        System.out.println("MapSelection init 2");
-
         selected[0] = true; // first map initially selected
 
         // load images
@@ -86,6 +87,7 @@ public class MapSelection extends BasicGameState
 
     }
 
+    //function to draw images on screen
     public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException
     {
         back.draw(backX, backY, backScale);
@@ -103,12 +105,17 @@ public class MapSelection extends BasicGameState
         }
     }
 
+    //function to update screen
     public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException
     {
+    	//initialize input variable
         Input input = gc.getInput();
 
         int mouseX = input.getMouseX();
         int mouseY = input.getMouseY();
+
+        // handle background music
+        OldMainWars.handleMusic(gc);
 
         boolean insideAvatarSelection = false;
         boolean insideGamePlay = false;
@@ -140,6 +147,7 @@ public class MapSelection extends BasicGameState
             }
         }
 
+        //Returns user to previous screen
         if(insideAvatarSelection)
         {
             if(backScale < 1.05f)
@@ -185,10 +193,13 @@ public class MapSelection extends BasicGameState
         }
     }
 
+    //function that sets map chosen
     public static void setMap(int n) throws SlickException
     {
         mapChosen = n;
     }
+    
+    //returns map chosen
     public static int getMap() throws SlickException
     {
         return mapChosen;
