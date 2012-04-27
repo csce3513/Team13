@@ -19,11 +19,12 @@ public class InstructionScreen extends BasicGameState
     public Image LetterH = null;
     public Image LetterM = null;
     public Image LetterP = null;
+    public Image LetterS = null;
     public Image back = null;
 	
     //initialize starting position for back button
     public static int backX = 300;
-    public static int backY = 620;
+    public static int backY = 690;
     
     //initialize scaling affect for back button
     float scaleStep = 0.0001f;
@@ -56,6 +57,8 @@ public class InstructionScreen extends BasicGameState
     	LetterH = new Image("images/letter_h.png");
     	LetterM = new Image("images/letter_m.png");
     	LetterP = new Image("images/letter_p.png");
+        LetterS = new Image("images/letter_s.png");
+        LetterS = LetterS.getScaledCopy(.1f);
     	back = new Image("images/back.png"); 
     	
     	font = new Font("Verdana", Font.BOLD, 30);
@@ -66,6 +69,7 @@ public class InstructionScreen extends BasicGameState
     public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException
     {
     	trueTypeFont.drawString(225, 35, "Instruction Screen");
+    	//arg2.drawString("Instruction Screen", 300, 40);
     	
     	arg2.drawImage(LetterM, 315, 80);
     	arg2.drawString("- Move", 375, 95);
@@ -81,17 +85,21 @@ public class InstructionScreen extends BasicGameState
     	
     	arg2.drawImage(LetterP, 314, 350);
     	arg2.drawString("- Pass", 375, 365);
+
+        arg2.drawImage(LetterS, 314, 415);
+    	arg2.drawString("- Mute Music", 375, 430);
     	
-    	trueTypeFont.drawString(200, 425, "Game Play Instructions");
+    	trueTypeFont.drawString(200, 490, "Game Play Instructions");
+    	//arg2.drawString("Game Play Instruction", 295, 425);
     	
-    	arg2.drawString("Select your avatar with the mouse, afterwards you can either", 100, 460);
-    	arg2.drawString("use the mouse click or use the hotkeys above to select an action.", 100, 475);
-    	arg2.drawString("Finally use the mouse to move on the board and to attack an enemy,", 100, 490);
-    	arg2.drawString("or heal an ally. Can make one move and one attack per turn.", 100, 505);
+    	arg2.drawString("Select your avatar with the mouse, afterwards you can either", 100, 525);
+    	arg2.drawString("use the mouse click or use the hotkeys above to select an action.", 100, 540);
+    	arg2.drawString("Finally use the mouse to move on the board and to attack an enemy,", 100, 555);
+    	arg2.drawString("or heal an ally. Can make one move and one attack per turn.", 100, 570);
     	
-    	trueTypeFont.drawString(300, 530, "Warning");
-    	arg2.drawString("If you click attack and then click one of your units", 100, 565);
-    	arg2.drawString("then damage will occur to your unit.", 100, 580);
+    	trueTypeFont.drawString(300, 595, "Warning");
+    	arg2.drawString("If you click attack and then click one of your units", 100, 630);
+    	arg2.drawString("then damage will occur to your unit.", 100, 645);
     	
     	//render back and next buttons
         back.draw(backX, backY, backScale);
@@ -110,7 +118,6 @@ public class InstructionScreen extends BasicGameState
         
         boolean instruction = false;
 
-        //handles return to main menu
         if( ( mouseX >= backX && mouseX <= backX + back.getWidth()) &&
             ( mouseY >= backY && mouseY <= backY + back.getHeight()) )
         {

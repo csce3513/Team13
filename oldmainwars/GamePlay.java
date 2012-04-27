@@ -43,6 +43,7 @@ public class GamePlay extends BasicGameState
     public Image blueDot = null;
     public Image redDot = null;
     public Image Tombstone = null;
+    public Image downArrow = null;
 
     //initializing grid and sound effects to null
     public MyGrid grid = null;
@@ -189,6 +190,9 @@ public class GamePlay extends BasicGameState
         redDot = dots.getSubImage(0, 0, 58, 58);
         blueDot = blueDot.getScaledCopy(.3f);
         redDot = redDot.getScaledCopy(.3f);
+        
+        //initializing down arrow image
+        downArrow = new Image("images/down_arrow.png");
 
         //set up animations
         setAnimations();
@@ -331,9 +335,9 @@ public class GamePlay extends BasicGameState
         //draw each unit and draw it's  HUD in the interface if it's selected
         for (int i = 0; i < (numUnits * 2); i++)
         {
-            if (unit[i].isAlive())
+            if (unit[i].isAlive())        
                 unit[i].draw();
-            
+                        
             //Unit died and put a tombstone and occupy space
             else
             {
@@ -344,7 +348,10 @@ public class GamePlay extends BasicGameState
             }
             
             if ((unit[i].isSelected()) && unit[i].isAlive())
+            {
                 unit[i].drawHUD(g);
+                downArrow.draw(unit[i].getXCoordinate(),unit[i].getYCoordinate()-30);
+            }
         }
 
         //display available movement squares if a unit is selected and move button pressed
@@ -357,6 +364,7 @@ public class GamePlay extends BasicGameState
                     pos2 = grid.GetTile(x, y);
                     if(inRange(selectedTile, pos2, MOVE) && (!pos2.GetOccupied()))
                     {
+                    	
                         moveTile.draw(pos2.GetX(), pos2.GetY());
                     }
                 }

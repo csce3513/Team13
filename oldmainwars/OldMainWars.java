@@ -66,7 +66,7 @@ public class OldMainWars extends StateBasedGame
         app.setDisplayMode(ScreenWidth, ScreenHeight, false);
         app.setTargetFrameRate(60);
 
-        fx = new Sound("sounds/beat.wav");
+        fx = new Sound("sounds/soundtrack.wav");
 
         app.start();
     }
