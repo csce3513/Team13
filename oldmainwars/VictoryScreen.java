@@ -5,13 +5,6 @@
 package oldmainwars;
 
 import org.newdawn.slick.*;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -55,7 +48,7 @@ public class VictoryScreen extends BasicGameState
     @Override
     public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException
     {
-        System.out.println("VictoryScreen init");
+        //System.out.println("VictoryScreen init");
         
         player1 = new Image("images/player1victory.png");
         player2 = new Image("images/player2victory.png");
@@ -79,42 +72,42 @@ public class VictoryScreen extends BasicGameState
         {
             if (AvatarSelection.getAvatar() == 1) //dante selected
             {
-                char2 = new Character(OldMainWars.Dante);
-                char1 = new Character(OldMainWars.Mage);
-                char3 = new Character(OldMainWars.Archer);
+                char2 = new Character(OldMainWars.Dante, 1);
+                char1 = new Character(OldMainWars.Mage, 1);
+                char3 = new Character(OldMainWars.Archer, 1);
             }
             else if (AvatarSelection.getAvatar() == 2) //mordecai selected
             {
-                char2 = new Character(OldMainWars.Mordecai);
-                char1 = new Character(OldMainWars.Archer);
-                char3 = new Character(OldMainWars.Warrior);
+                char2 = new Character(OldMainWars.Mordecai, 1);
+                char1 = new Character(OldMainWars.Archer, 1);
+                char3 = new Character(OldMainWars.Warrior, 1);
             }
             else //if (AvatarSelection.getAvatar() == 3) //morohtar selected
             {
-                char2 = new Character(OldMainWars.Morohtar);
-                char1 = new Character(OldMainWars.Warrior);
-                char3 = new Character(OldMainWars.Mage);
+                char2 = new Character(OldMainWars.Morohtar, 1);
+                char1 = new Character(OldMainWars.Warrior, 1);
+                char3 = new Character(OldMainWars.Mage, 1);
             }
         }
         else if(GamePlay.getVictor() == 2)
         {
             if (AvatarSelection2.getAvatar() == 1) //dante selected
             {
-                char2 = new Character(OldMainWars.Dante);
-                char1 = new Character(OldMainWars.Mage);
-                char3 = new Character(OldMainWars.Archer);
+                char2 = new Character(OldMainWars.Dante, 2);
+                char1 = new Character(OldMainWars.Mage, 2);
+                char3 = new Character(OldMainWars.Archer, 2);
             }
             else if (AvatarSelection2.getAvatar() == 2) //mordecai selected
             {
-                char2 = new Character(OldMainWars.Mordecai);
-                char1 = new Character(OldMainWars.Archer);
-                char3 = new Character(OldMainWars.Warrior);
+                char2 = new Character(OldMainWars.Mordecai, 2);
+                char1 = new Character(OldMainWars.Archer, 2);
+                char3 = new Character(OldMainWars.Warrior, 2);
             }
             else //if (AvatarSelection.getAvatar() == 3) //morohtar selected
             {
-                char2 = new Character(OldMainWars.Morohtar);
-                char1 = new Character(OldMainWars.Warrior);
-                char3 = new Character(OldMainWars.Mage);
+                char2 = new Character(OldMainWars.Morohtar, 2);
+                char1 = new Character(OldMainWars.Warrior, 2);
+                char3 = new Character(OldMainWars.Mage, 2);
             }
         }
          
@@ -147,6 +140,16 @@ public class VictoryScreen extends BasicGameState
     @Override
     public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException
     {
+    	//initialize variables
+        Input input = gc.getInput();
 
+        int mouseX = 0;
+        int mouseY = 0;
+
+        //function for when mouse is pressed
+        if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
+        {
+        	sb.enterState(OldMainWars.MainMenu);
+        }
     }
 }

@@ -50,21 +50,22 @@ public class AvatarSelection extends BasicGameState
 
     public int stateID = -1;
 
+    //constructor
     public AvatarSelection (int stateID)
     {
         this.stateID = stateID;
     }
 
+    //function to get state id
     @Override
     public int getID()
     {
         return stateID;
     }
 
+    //function to initialize images and character arrays
     public void init(GameContainer arg0, StateBasedGame arg1) throws SlickException
     {
-        System.out.println("AvatarSelection init");
-
         selected[0] = false; // no avatar initially selected
 
         // load images
@@ -86,6 +87,7 @@ public class AvatarSelection extends BasicGameState
         characterY[3] = 310;
     }
 
+    //function to draw images on screen
     public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2) throws SlickException
     {
     	//Render String telling player one to choose
@@ -119,6 +121,7 @@ public class AvatarSelection extends BasicGameState
         }
     }
 
+    //function that updates the screen
 	public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException
     {
 		//initializing variables
@@ -127,6 +130,9 @@ public class AvatarSelection extends BasicGameState
         //Left/Right mouse clicks
         int mouseX = input.getMouseX();
         int mouseY = input.getMouseY();
+
+        // handle background music
+        OldMainWars.handleMusic(gc);
 
         //initializing variables
         boolean insideMainMenu = false;
