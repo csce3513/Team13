@@ -33,6 +33,8 @@ import org.newdawn.slick.tests.*;
 public class CharacterTest
 {
 
+
+
     public CharacterTest() {
     }
 
@@ -55,12 +57,12 @@ public class CharacterTest
     @Test
     public void testConstructor()
     {
-        Character dante = new Character(OldMainWars.Dante, false);
-        Character warrior = new Character(1, false);
-        Character morohtar = new Character(OldMainWars.Morohtar, false);
-        Character archer = new Character(3, false);
-        Character mordecai = new Character(OldMainWars.Mordecai, false);
-        Character mage = new Character(OldMainWars.Mage, false);
+        Character dante = new Character(OldMainWars.Dante,1);
+        Character warrior = new Character(1, 1);
+        Character morohtar = new Character(OldMainWars.Morohtar,1);
+        Character archer = new Character(3, 1);
+        Character mordecai = new Character(OldMainWars.Mordecai,1);
+        Character mage = new Character(OldMainWars.Mage,1);
 
         assertEquals(dante.getName(), "Dante");
         assertEquals(dante.getHP(), 120);
@@ -114,21 +116,21 @@ public class CharacterTest
     @Test
     public void testDamage()
     {
-        Character warrior = new Character(1, false);
+        Character warrior = new Character(1, 1);
         warrior.Damage(10);
         assertEquals(warrior.getHP(), 90);
 
         warrior.Damage(20);
-	assertEquals(warrior.getHP(), 70);
-
-	warrior.Damage(50);
-	assertEquals(warrior.getHP(), 20);
+        assertEquals(warrior.getHP(), 70);
+        
+        warrior.Damage(50);
+        assertEquals(warrior.getHP(), 20);
     }
 
     @Test
     public void testHealed()
     {
-        Character mage = new Character(5, false);
+        Character mage = new Character(5, 1);
         mage.Healed(20);
         assertEquals(mage.getHP(), 75);
 
@@ -144,7 +146,7 @@ public class CharacterTest
     @Test
     public void testCastSpell()
     {
-        Character archer = new Character(OldMainWars.Archer, false);
+        Character archer = new Character(OldMainWars.Archer, 1);
         int numTrue = 0;
 
         for(int x = 0; x <= 100; x++)
@@ -160,7 +162,7 @@ public class CharacterTest
     @Test
     public void testEnoughMP()
     {
-        Character mordecai = new Character(4, false);
+        Character mordecai = new Character(4, 1);
         int count = 0;
 
         //mordecai has 120 MP so should only be able to cast spell 12 times before out of MP
@@ -176,7 +178,7 @@ public class CharacterTest
     @Test
     public void testAttackDamage()
     {
-        Character dante = new Character(0, false);
+        Character dante = new Character(0, 1);
         int numTrue = 0;
 
         int damage;

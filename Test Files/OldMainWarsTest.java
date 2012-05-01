@@ -76,7 +76,6 @@ public class OldMainWarsTest extends BasicGame
         }
         hp = gp.unit[0].getHP();
         System.out.println("hp: " + hp);
-        testTest();
 
         //container.exit();
     }
@@ -97,9 +96,5 @@ public class OldMainWarsTest extends BasicGame
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
-    public void testTest()
-    {
-        assertEquals(hp, 105);
-    }
+
 }
